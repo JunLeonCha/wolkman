@@ -30,7 +30,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  google_maps_flutter: ^2.1.7
+  flutter_map: ^5.0.0  # Pour la carte
+  latlong2: 0.9.1  # Pour la gestion des coordonnées géographiques
+  geolocator: ^10.0.1  # Pour la géolocalisation
+  permission_handler: ^10.4.0  # Pour gérer les permissions d'accès à la localisation
 
 
   # The following adds the Cupertino Icons font to your application.
