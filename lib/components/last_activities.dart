@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:wolkman/models/user_models.dart';
+import 'package:wolkman/services/user/user-services.dart';
 
 class LastActivities extends StatelessWidget {
   LastActivities({super.key});
 
-  final user = UserModels(name: "Anna");
+  final user = UserServices().getCurrentUser();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class LastActivities extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              user.name,
+                              user!.userMetadata?["display_name"],
                               textAlign: TextAlign.left,
                             ),
                             Text("25 mars 2025")

@@ -14,7 +14,7 @@ class AuthService {
       if (response.session != null) {
         // sign in succed
         Get.snackbar('Success', 'Connexion réussie avec l\'email: $email');
-        Get.offNamed("/sign_in");
+        Get.offNamed("/");
       }
     } on AuthException catch (e) {
       Get.snackbar('Error', e.message);
@@ -26,10 +26,11 @@ class AuthService {
   Future<void> signUp(
       String email, String password, firstname, lastname) async {
     try {
+      final display_name = '${firstname} ${lastname}';
       final response = await supabase.auth.signUp(
           email: email,
           password: password,
-          data: {'first_name': firstname, 'last_name': lastname});
+          data: {'display_name': display_name});
       if (response.user != null) {
         // sign up succed
         Get.snackbar('Success', 'Inscription réussie avec l\'email: $email');
@@ -44,6 +45,6 @@ class AuthService {
   Future<void> signOut() async {
     await supabase.auth.signOut();
     Get.snackbar('Success', 'Déconnexion réussie');
-    Get.offAllNamed("/");
+    Get.offAllNamed("/sign_in");
   }
 }
