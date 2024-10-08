@@ -22,6 +22,7 @@ void main() async {
       getPages: [
         GetPage(name: '/', page: () => Homepage()),
         GetPage(name: '/sign_in', page: () => Authentication()),
+        GetPage(name: '/map', page: () => Maps()),
       ],
       // routes: {
       //   // When navigating to the "/" route, build the FirstScreen widget.

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 
 class FollowUpSheet extends StatelessWidget {
   const FollowUpSheet({super.key});
@@ -13,6 +14,9 @@ class FollowUpSheet extends StatelessWidget {
             ElevatedButton(onPressed: () => {}, child: Text("Moi")),
             Gap(20),
             ElevatedButton(onPressed: () => {}, child: Text("Suivi")),
+            Gap(20),
+            ElevatedButton(
+                onPressed: () => {Get.toNamed("/map")}, child: Text("Map")),
           ],
         ),
       ],
