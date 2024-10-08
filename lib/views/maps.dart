@@ -9,8 +9,8 @@ class Maps extends StatefulWidget {
 }
 
 class _MapsState extends State<Maps> {
-  // La position actuelle de l'utilisateur
-  LatLng currentLocation = LatLng(48.858844, 2.294351); // Coordonnées initiales (Tour Eiffel)
+  // User's current location
+  LatLng currentLocation = LatLng(48.858844, 2.294351); // Initial coordinates
   late MapController _mapController;
 
   @override
@@ -18,45 +18,45 @@ class _MapsState extends State<Maps> {
     super.initState();
     _mapController = MapController();
 
-    // Vérifier et demander la permission de localisation
+    // Check and request location permission
     _checkLocationPermission();
 
-    // Suivre les changements de position
+    // Get real-time location
     _getCurrentLocation();
   }
 
-  // Vérification des permissions de localisation
+  // Location permission check
   Future<void> _checkLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Vérifie si les services de localisation sont activés
+    // Check if location services are on
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      return Future.error('Les services de localisation sont désactivés.');
+      return Future.error('Location services off.');
     }
 
-    // Vérifie les permissions
+    // Check permissions
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Les permissions de localisation sont refusées.');
+        return Future.error('Permissions denied.');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return Future.error('Les permissions de localisation sont refusées de façon permanente.');
+      return Future.error('Permissions permanently denied.');
     }
   }
 
-  // Obtenir la localisation en temps réel
+  // Get live location updates
   void _getCurrentLocation() {
     Geolocator.getPositionStream().listen((Position position) {
-      // Met à jour la position de la carte avec les nouvelles coordonnées GPS
+      // Update map with new GPS coordinates
       setState(() {
         currentLocation = LatLng(position.latitude, position.longitude);
-        _mapController.move(currentLocation, 15.0);  // Zoom à 15 sur la nouvelle position
+        _mapController.move(currentLocation, 15.0); // Zoom level 15
       });
     });
   }
@@ -64,7 +64,7 @@ class _MapsState extends State<Maps> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Carte OpenStreetMap')),
+      appBar: AppBar(title: Text('OpenStreetMap')),
       body: FlutterMap(
         mapController: _mapController,
         options: MapOptions(
