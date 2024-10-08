@@ -11,6 +11,8 @@ class _AuthenticationState extends State<Authentication> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController firstnameController = TextEditingController();
+  final TextEditingController lastnameController = TextEditingController();
 
   final AuthService _authService = AuthService();
 
@@ -28,7 +30,9 @@ class _AuthenticationState extends State<Authentication> {
       if (isLogin) {
         await _authService.signIn(email, password);
       } else {
-        await _authService.signUp(email, password);
+        final firstname = firstnameController.text;
+        final lastname = lastnameController.text;
+        await _authService.signUp(email, password, firstname, lastname);
       }
     }
   }
@@ -45,6 +49,30 @@ class _AuthenticationState extends State<Authentication> {
           key: _formKey,
           child: Column(
             children: [
+              if (!isLogin) ...[
+                TextFormField(
+                  controller: firstnameController,
+                  decoration: InputDecoration(labelText: 'Prénom'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Veuillez entrer un prénom';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: lastnameController,
+                  decoration: InputDecoration(labelText: 'Nom de famille'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Veuillez entrer un nom de famille';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 24.0),
+              ],
               TextFormField(
                 controller: emailController,
                 decoration: InputDecoration(labelText: 'Email'),

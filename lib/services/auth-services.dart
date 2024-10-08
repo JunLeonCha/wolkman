@@ -23,12 +23,13 @@ class AuthService {
     }
   }
 
-  Future<void> signUp(String email, String password) async {
+  Future<void> signUp(
+      String email, String password, firstname, lastname) async {
     try {
       final response = await supabase.auth.signUp(
-        email: email,
-        password: password,
-      );
+          email: email,
+          password: password,
+          data: {'first_name': firstname, 'last_name': lastname});
       if (response.user != null) {
         // sign up succed
         Get.snackbar('Success', 'Inscription réussie avec l\'email: $email');

@@ -6,7 +6,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:wolkman/views/authentication.dart';
 import 'package:get/get.dart'; // Import de GetX
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
+  await SupabaseService.initialize();
+
   runApp(
     GetMaterialApp(
       title: 'Named Routes Demo',
