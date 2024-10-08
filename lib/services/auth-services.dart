@@ -1,55 +1,48 @@
-// lib/services/auth_service.dart
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthService {
   final SupabaseClient supabase = Supabase.instance.client;
 
-  Future<void> signIn(
-      BuildContext context, String email, String password) async {
+  Future<void> signIn(String email, String password) async {
     try {
       final response = await supabase.auth.signInWithPassword(
         email: email,
         password: password,
       );
       if (response.session != null) {
-        // Connexion réussie
-        print("Connexion réussie avec l'email: $email");
+        // sign in succed
+        Get.snackbar('Success', 'Connexion réussie avec l\'email: $email');
+        Get.offNamed("/sign_in");
       }
     } on AuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message)),
-      );
+      Get.snackbar('Error', e.message);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Une erreur est survenue')),
-      );
+      Get.snackbar('Error', 'Une erreur est survenue');
     }
   }
 
-  Future<void> signUp(
-      BuildContext context, String email, String password) async {
+  Future<void> signUp(String email, String password) async {
     try {
       final response = await supabase.auth.signUp(
         email: email,
         password: password,
       );
       if (response.user != null) {
-        // Inscription réussie
-        print("Inscription réussie avec l'email: $email");
+        // sign up succed
+        Get.snackbar('Success', 'Inscription réussie avec l\'email: $email');
       }
     } on AuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message)),
-      );
+      Get.snackbar('Error', e.message);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Une erreur est survenue')),
-      );
+      Get.snackbar('Error', 'Une erreur est survenue');
     }
   }
 
   Future<void> signOut() async {
-    final response = await supabase.auth.signOut();
+    await supabase.auth.signOut();
+    Get.snackbar('Success', 'Déconnexion réussie');
+    Get.offAllNamed("/");
   }
 }

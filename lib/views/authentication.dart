@@ -7,12 +7,12 @@ class Authentication extends StatefulWidget {
 }
 
 class _AuthenticationState extends State<Authentication> {
-  bool isLogin = true; // Utilisé pour alterner entre connexion et inscription
+  bool isLogin = true;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  final AuthService _authService = AuthService(); // Instance du service
+  final AuthService _authService = AuthService();
 
   void toggleFormType() {
     setState(() {
@@ -26,11 +26,9 @@ class _AuthenticationState extends State<Authentication> {
       final password = passwordController.text;
 
       if (isLogin) {
-        _authService
-            .signIn(context, email, password)
-            .then((data) => {Navigator.popAndPushNamed(context, "/sign_in")});
+        await _authService.signIn(email, password);
       } else {
-        await _authService.signUp(context, email, password);
+        await _authService.signUp(email, password);
       }
     }
   }
@@ -80,10 +78,6 @@ class _AuthenticationState extends State<Authentication> {
               ElevatedButton(
                 onPressed: submit,
                 child: Text(isLogin ? 'Connexion' : 'Inscription'),
-              ),
-              ElevatedButton(
-                onPressed: () => {_authService.signOut()},
-                child: Text("Déconnexion"),
               ),
               TextButton(
                 onPressed: toggleFormType,
