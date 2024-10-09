@@ -12,9 +12,9 @@ class FollowUpSheet extends StatelessWidget {
         Row(
           children: [
             ElevatedButton(onPressed: () => {}, child: Text("Moi")),
-            Gap(20),
+            const Gap(20),
             ElevatedButton(onPressed: () => {}, child: Text("Suivi")),
-            Gap(20),
+            const Gap(20),
             ElevatedButton(
                 onPressed: () => {Get.toNamed("/map")}, child: Text("Map")),
           ],
