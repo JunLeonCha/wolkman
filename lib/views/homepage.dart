@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:wolkman/components/follow_up_sheet.dart';
 import 'package:wolkman/components/last_activities.dart';
 import 'package:wolkman/services/auth-services.dart';
@@ -21,12 +22,16 @@ class Homepage extends StatelessWidget {
               children: [
                 FollowUpSheet(
                     userId: _authService.supabase.auth.currentUser?.id),
-                Gap(16),
+                const Gap(16),
                 LastActivities(),
                 ElevatedButton(
                   onPressed: () => {_authService.signOut()},
                   child: Text("Déconnexion"),
                 ),
+                const Gap(20),
+                IconButton(
+                    onPressed: () => {Get.toNamed('/map')},
+                    icon: Image.asset('assets/map.png'))
               ],
             ),
           ),

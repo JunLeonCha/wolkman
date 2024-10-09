@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:wolkman/services/course/activity.dart';
+import 'package:wolkman/views/activity-detail.dart';
 
 class CardsActivities extends StatelessWidget {
   final String? userId;
@@ -34,29 +36,35 @@ class CardsActivities extends StatelessWidget {
             final activity = activities[index];
             final String formattedDate = DateFormat('dd-MM-yyyy')
                 .format(DateTime.parse(activity?['created_at']));
-            return Card(
-              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              color: Colors.cyan[50],
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Gap(16),
-                    Text(
-                      'Nom de l\'activité: ${activity['name'] ?? 'N/A'}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+            return GestureDetector(
+              onTap: () =>
+                  {Get.to(ActivityDetails(activityId: activity?["id"]))},
+              child: Card(
+                margin:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                color: Colors.cyan[50],
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Gap(16),
+                      Text(
+                        'Nom de l\'activité: ${activity['name'] ?? 'N/A'}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
-                    ),
-                    Text('Fais le: ${formattedDate ?? 'N/A'}'),
-                    Text(
-                        'Temps de l\'activité: ${activity['time'] ?? 'N/A'} minutes'),
-                    Text('Vitesse moyenne: ${activity['speed'] ?? 'N/A'} km/h'),
-                    Text(
-                        'Distance parcouru: ${activity['distance'] ?? 'N/A'} km'),
-                  ],
+                      Text('Fais le: ${formattedDate ?? 'N/A'}'),
+                      Text(
+                          'Temps de l\'activité: ${activity['time'] ?? 'N/A'} minutes'),
+                      Text(
+                          'Vitesse moyenne: ${activity['speed'] ?? 'N/A'} km/h'),
+                      Text(
+                          'Distance parcouru: ${activity['distance'] ?? 'N/A'} km'),
+                    ],
+                  ),
                 ),
               ),
             );

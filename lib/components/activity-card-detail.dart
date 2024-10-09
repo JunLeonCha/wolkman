@@ -23,13 +23,14 @@ class ActivityCardDetail extends StatelessWidget {
         final activity = snapshot.data; // Data snapshot
 
         if (activity == null) {
-          return Center(child: Text('Aucune activité trouvée.'));
+          return const Center(child: Text('Aucune activité trouvée.'));
         }
 
         return Container(
           margin: const EdgeInsets.symmetric(
               vertical: 20.0, horizontal: 10.0), // Margin for spacing
           child: Card(
+            color: Colors.cyan[50],
             elevation: 4, // Shadow effect
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0), // Rounded corners
@@ -40,41 +41,37 @@ class ActivityCardDetail extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Activity ID: ${activity['id'] ?? 'N/A'}',
-                    style: TextStyle(
+                    'Nom de l\'activité: ${activity['name'] ?? 'N/A'}',
+                    style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                         color: Colors.blueAccent),
                   ),
-                  SizedBox(height: 10),
+                  const Gap(10),
                   Divider(
                       thickness: 1.5,
                       color: Colors.grey[400]), // Separator line
-                  SizedBox(height: 10),
+                  const Gap(10),
                   Text(
-                    'Created At: ${activity['created_at'] ?? 'N/A'}',
+                    'Fais le: ${activity['created_at'] ?? 'N/A'}',
                     style: TextStyle(fontSize: 14),
                   ),
-                  SizedBox(height: 5),
+                  const Gap(5),
                   Text(
-                    'Time: ${activity['time'] ?? 'N/A'} minutes',
+                    'Temps de l\'activité: ${activity['time'] ?? 'N/A'} minutes',
                     style: TextStyle(fontSize: 14),
                   ),
-                  SizedBox(height: 5),
+                  const Gap(5),
                   Text(
-                    'Speed: ${activity['speed'] ?? 'N/A'} km/h',
+                    'Vitesse moyenne: ${activity['speed'] ?? 'N/A'} km/h',
                     style: TextStyle(fontSize: 14),
                   ),
-                  SizedBox(height: 5),
+                  const Gap(5),
                   Text(
-                    'Distance: ${activity['distance'] ?? 'N/A'} km',
+                    'Distance parcouru:: ${activity['distance'] ?? 'N/A'} km',
                     style: TextStyle(fontSize: 14),
                   ),
-                  SizedBox(height: 5),
-                  Text(
-                    'Profile ID: ${activity['profile_id'] ?? 'N/A'}',
-                    style: TextStyle(fontSize: 14),
-                  ),
+                  const Gap(5),
                 ],
               ),
             ),
