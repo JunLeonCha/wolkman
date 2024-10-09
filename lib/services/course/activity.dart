@@ -4,7 +4,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class ActivityServices extends GetxController {
   final SupabaseClient supabase = Supabase.instance.client;
 
-  // Observable pour stocker les détails de l'activité
   var activityDetail = {}.obs;
 
   Future<Map<String, dynamic>> getActivityDetails(num activityId) async {
@@ -16,7 +15,7 @@ class ActivityServices extends GetxController {
           .single();
       return activity;
     } catch (e) {
-      print('Error fetching activity details: $e');
+      print('Error: $e');
       return {};
     }
   }
@@ -29,13 +28,12 @@ class ActivityServices extends GetxController {
           .select("*")
           .eq("profile_id", id as String);
       print(activities);
-      // Convertir les résultats en List<Map<String, dynamic>>
       return activities
           .map((activity) => activity as Map<String, dynamic>)
           .toList();
     } catch (e) {
       print('Error fetching activity details: $e');
-      return []; // Retourne une liste vide en cas d'erreur
+      return [];
     }
   }
 
@@ -50,7 +48,7 @@ class ActivityServices extends GetxController {
           .single();
       return lastActivity;
     } catch (e) {
-      print('Error fetching last activity details: $e');
+      print('Erreur: $e');
       return null;
     }
   }

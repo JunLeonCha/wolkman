@@ -2,31 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:wolkman/services/course/activity.dart';
 
 class ActivityCardDetail extends StatelessWidget {
-  final num activityId; // Recevez l'ID de l'activité
+  final num activityId;
 
   const ActivityCardDetail({super.key, required this.activityId});
 
   @override
   Widget build(BuildContext context) {
-    final ActivityServices activityServices =
-        ActivityServices(); // Instancier le service
+    final ActivityServices activityServices = ActivityServices();
 
     return FutureBuilder<Map<String, dynamic>>(
-      future: activityServices.getActivityDetails(
-          activityId), // Récupérer les détails de l'activité
+      future: activityServices.getActivityDetails(activityId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-              child:
-                  CircularProgressIndicator()); // Loader pendant le chargement
+          return const Center(child: CircularProgressIndicator()); //Loader
         } else if (snapshot.hasError) {
-          return Center(
-              child: Text('Erreur : ${snapshot.error}')); // Gérer l'erreur
+          return Center(child: Text('Erreur : ${snapshot.error}'));
         }
 
-        final activity = snapshot.data; // Données de l'activité
+        final activity = snapshot.data; // data snapshot
 
-        // Vérifier si l'activité est nulle
         if (activity == null) {
           return Center(child: Text('Aucune activité trouvée.'));
         }

@@ -22,7 +22,7 @@ class CardsActivities extends StatelessWidget {
         final activities = snapshot.data;
 
         if (activities == null || activities.isEmpty) {
-          return Center(child: Text('Aucune activité trouvée.'));
+          return const Center(child: Text('Aucune activité trouvée.'));
         }
 
         // Affichage de toutes les activités dans une ListView

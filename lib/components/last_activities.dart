@@ -31,7 +31,6 @@ class LastActivities extends StatelessWidget {
 
         final user = userSnapshot.data;
         final String displayName = user?["display_name"] ?? 'Nom indisponible';
-        final String userId = user?["id"];
 
         return FutureBuilder(
           future:
@@ -62,7 +61,6 @@ class LastActivities extends StatelessWidget {
               );
             }
 
-            // Si une activité existe, continue avec l'affichage normal
             final String distance = '${activity["distance"].toString()} Km';
             final num activityId = activity["id"];
             final String speed = '${activity["speed"].toString()} Km/h';
@@ -127,12 +125,12 @@ class LastActivities extends StatelessWidget {
                               ],
                             ),
                             const Gap(8),
-                            Divider(
+                            const Divider(
                               height: 20,
                               thickness: 1,
                               indent: 20,
                               endIndent: 20,
-                              color: const Color.fromARGB(255, 37, 84, 90),
+                              color: Color.fromARGB(255, 37, 84, 90),
                             ),
                             const Gap(8),
                             Row(
