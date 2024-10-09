@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
+import '../services/course/activity.dart';
+import '../services/user/user-services.dart';
+import 'package:get/get.dart';
 
 class Maps extends StatefulWidget {
   @override
@@ -14,6 +17,15 @@ class _MapsState extends State<Maps> {
   late MapController _mapController;
   List<LatLng> routePoints = []; // Store the points of the route
   double totalDistance = 0.0; // Store the total distance
+  bool _isTracking = true; // Track whether the route is being recorded
+  bool _isFirstPoint = true; // To check if it's the first point added
+  bool _shouldFollowUser = true; // To control auto-centering
+  double _currentZoom = 15.0; // Zoom level
+  DateTime? startTime; // Start time of the journey
+  List<Map<String, dynamic>> savedRoutes = []; // List to save journey data
+  final ActivityServices activityServices = Get.put(ActivityServices());
+  final UserServices userServices =
+      UserServices(); // Create an instance of UserServices
 
   @override
   void initState() {
@@ -55,10 +67,17 @@ class _MapsState extends State<Maps> {
   // Get current location in real-time and calculate distance
   void _getCurrentLocation() {
     Geolocator.getPositionStream().listen((Position position) {
+      if (!_isTracking) return; // Stop tracking if paused
+
       LatLng newLocation = LatLng(position.latitude, position.longitude);
 
-      // Calculate distance from last location
-      if (routePoints.isNotEmpty) {
+      // Record the start time if this is the first point
+      if (_isFirstPoint) {
+        startTime = DateTime.now();
+      }
+
+      // Calculate distance from last location, ignoring the first point
+      if (routePoints.isNotEmpty && !_isFirstPoint) {
         LatLng lastLocation = routePoints.last;
         double distanceInMeters = Geolocator.distanceBetween(
           lastLocation.latitude,
@@ -73,9 +92,70 @@ class _MapsState extends State<Maps> {
       setState(() {
         currentLocation = newLocation;
         routePoints.add(newLocation); // Add to route
-        _mapController.move(currentLocation, 15.0); // Zoom to 15
+        _isFirstPoint = false; // After the first point is added
+
+        if (_shouldFollowUser) {
+          _mapController.move(currentLocation, _currentZoom); // Follow user
+        }
       });
     });
+  }
+
+  // Toggle tracking for pause/resume
+  void _toggleTracking() {
+    setState(() {
+      _isTracking = !_isTracking;
+    });
+  }
+
+// Save route data and show a pop-up message
+  void _endJourney(BuildContext context) async {
+    if (routePoints.isNotEmpty) {
+      DateTime endTime = DateTime.now();
+
+      // Get the current user's profile ID dynamically
+      final userDetails = await userServices.getUserDetails();
+      String profileId = userDetails?['id']; // Use the ID from the user details
+
+      // Prepare journey data
+      Map<String, dynamic> journeyData = {
+        'start_point': routePoints.first,
+        'end_point': routePoints.last,
+        'start_time': startTime,
+        'end_time': endTime,
+        'total_distance': totalDistance.toStringAsFixed(2),
+      };
+
+      savedRoutes.add(journeyData);
+
+      // Log the data before sending to Supabase
+      print('Inserting activity with the following data:');
+      print('Time: ${endTime.toIso8601String()}');
+      print(
+          'Speed: ${double.parse((totalDistance / (endTime.difference(startTime!).inSeconds / 3600)).toStringAsFixed(2))}');
+      print('Distance: ${double.parse(totalDistance.toStringAsFixed(2))}');
+      print('Profile ID: $profileId');
+
+      // Insert activity into Supabase
+      await activityServices.insertActivity(
+        time: endTime.toIso8601String(),
+        speed: double.parse(
+            (totalDistance / (endTime.difference(startTime!).inSeconds / 3600))
+                .toStringAsFixed(2)),
+        distance: double.parse(totalDistance.toStringAsFixed(2)),
+      );
+
+      // Show a pop-up message (SnackBar)
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Journey data saved!')),
+      );
+
+      setState(() {
+        routePoints.clear();
+        totalDistance = 0.0;
+        _isFirstPoint = true;
+      });
+    }
   }
 
   @override
@@ -89,7 +169,7 @@ class _MapsState extends State<Maps> {
             mapController: _mapController,
             options: MapOptions(
               center: currentLocation,
-              zoom: 15.0,
+              zoom: _currentZoom,
             ),
             children: [
               TileLayer(
@@ -114,7 +194,7 @@ class _MapsState extends State<Maps> {
           ),
           // UI overlay
           Positioned(
-            bottom: 50,
+            bottom: 120, // Adjust position so it's above the "End" button
             left: 20,
             right: 20,
             child: Container(
@@ -127,11 +207,11 @@ class _MapsState extends State<Maps> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Icons and labels (Itinerary, Pause, Voice)
-                  const Row(
+                  // Icons and labels (Itinerary, Pause/Resume, Voice)
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Column(
+                      const Column(
                         children: [
                           Icon(Icons.route),
                           Text('Itinerary'),
@@ -139,39 +219,39 @@ class _MapsState extends State<Maps> {
                       ),
                       Column(
                         children: [
-                          Icon(Icons.pause),
-                          Text('Pause'),
+                          GestureDetector(
+                            onTap: _toggleTracking, // Toggle pause/resume
+                            child: Column(
+                              children: [
+                                Icon(_isTracking
+                                    ? Icons.pause
+                                    : Icons.play_arrow),
+                                Text(_isTracking ? 'Pause' : 'Resume'),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
-                      Column(
+                      const Column(
                         children: [
-                          Icon(Icons.volume_up),
+                          Icon(Icons.voice_chat),
                           Text('Voice'),
                         ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  // Display total distance
-                  Text(
-                    'Total Distance: ${totalDistance.toStringAsFixed(2)} km',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(height: 10),
-                  // Activity button
-                  ElevatedButton(
-                    onPressed: () {
-                      // Handle button click
-                    },
-                    child: const Text('Start Activity'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue, // Button color
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 15.0, horizontal: 30.0),
-                    ),
-                  ),
                 ],
               ),
+            ),
+          ),
+          // End journey button
+          Positioned(
+            bottom: 30,
+            left: 20,
+            right: 20,
+            child: ElevatedButton(
+              onPressed: () => _endJourney(context), // End journey
+              child: const Text('End Journey'),
             ),
           ),
         ],
