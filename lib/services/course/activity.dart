@@ -49,6 +49,7 @@ class ActivityServices extends GetxController {
     required String time,
     required double speed,
     required double distance,
+    required String profileId,
   }) async {
     try {
       // Get the current user's UUID using UserServices

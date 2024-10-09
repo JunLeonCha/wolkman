@@ -117,6 +117,9 @@ class _MapsState extends State<Maps> {
       final userDetails = await userServices.getUserDetails();
       String profileId = userDetails?['id']; // Use the ID from the user details
 
+      // Calculate time in minutes
+      int timeInMinutes = endTime.difference(startTime!).inMinutes;
+
       // Prepare journey data
       Map<String, dynamic> journeyData = {
         'start_point': routePoints.first,
@@ -130,7 +133,7 @@ class _MapsState extends State<Maps> {
 
       // Log the data before sending to Supabase
       print('Inserting activity with the following data:');
-      print('Time: ${endTime.toIso8601String()}');
+      print('Time (in minutes): $timeInMinutes');
       print(
           'Speed: ${double.parse((totalDistance / (endTime.difference(startTime!).inSeconds / 3600)).toStringAsFixed(2))}');
       print('Distance: ${double.parse(totalDistance.toStringAsFixed(2))}');
@@ -138,11 +141,12 @@ class _MapsState extends State<Maps> {
 
       // Insert activity into Supabase
       await activityServices.insertActivity(
-        time: endTime.toIso8601String(),
+        time: timeInMinutes.toString(),
         speed: double.parse(
             (totalDistance / (endTime.difference(startTime!).inSeconds / 3600))
                 .toStringAsFixed(2)),
         distance: double.parse(totalDistance.toStringAsFixed(2)),
+        profileId: profileId, // Include profileId in the activity insertion
       );
 
       // Show a pop-up message (SnackBar)
@@ -207,11 +211,6 @@ class _MapsState extends State<Maps> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Distance display
-                  Text(
-                    'Distance: ${totalDistance.toStringAsFixed(2)} km',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
                   // Icons and labels (Itinerary, Pause/Resume, Voice)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -244,6 +243,12 @@ class _MapsState extends State<Maps> {
                         ],
                       ),
                     ],
+                  ),
+                  // Display real-time distance
+                  SizedBox(height: 20),
+                  Text(
+                    'Distance: ${totalDistance.toStringAsFixed(2)} km', // Display the distance in km
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
