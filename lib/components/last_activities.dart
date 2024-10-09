@@ -108,8 +108,9 @@ class LastActivities extends StatelessWidget {
                             const Gap(16),
                             Row(
                               children: [
-                                Expanded(
+                                Flexible(
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       _buildActivityDetail(
                                           distance, "Distance"),
@@ -118,7 +119,7 @@ class LastActivities extends StatelessWidget {
                                       const Gap(16),
                                       _buildActivityDetail(time, "Durée"),
                                       const Gap(16),
-                                      diagrammeSVG
+                                      diagrammeSVG,
                                     ],
                                   ),
                                 ),

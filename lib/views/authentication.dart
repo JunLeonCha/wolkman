@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:wolkman/services/auth-services.dart';
 
 class Authentication extends StatefulWidget {
@@ -83,7 +84,7 @@ class _AuthenticationState extends State<Authentication> {
                     return null;
                   },
                 ),
-                SizedBox(height: 16.0),
+                Gap(16.0),
                 TextFormField(
                   controller: lastnameController,
                   decoration: InputDecoration(labelText: 'Nom de famille'),
@@ -94,7 +95,7 @@ class _AuthenticationState extends State<Authentication> {
                     return null;
                   },
                 ),
-                SizedBox(height: 24.0),
+                Gap(24.0),
               ],
               TextFormField(
                 controller: emailController,
@@ -110,7 +111,7 @@ class _AuthenticationState extends State<Authentication> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              Gap(16.0),
               TextFormField(
                 controller: passwordController,
                 decoration: InputDecoration(labelText: 'Mot de passe'),
@@ -125,7 +126,7 @@ class _AuthenticationState extends State<Authentication> {
                   return null;
                 },
               ),
-              SizedBox(height: 24.0),
+              Gap(24.0),
               ElevatedButton(
                 onPressed: submit,
                 child: Text(isLogin ? 'Connexion' : 'Inscription'),

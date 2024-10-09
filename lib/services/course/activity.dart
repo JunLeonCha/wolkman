@@ -29,7 +29,8 @@ class ActivityServices extends GetxController {
       final List<dynamic> activities = await supabase
           .from("activities")
           .select("*")
-          .eq("profile_id", id as String);
+          .eq("profile_id", id as String)
+          .order("created_at", ascending: true);
       print(activities);
       return activities
           .map((activity) => activity as Map<String, dynamic>)

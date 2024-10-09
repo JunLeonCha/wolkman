@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:wolkman/services/course/activity.dart';
 
 class ActivityCardDetail extends StatelessWidget {
@@ -25,6 +26,7 @@ class ActivityCardDetail extends StatelessWidget {
           return Center(child: Text('Aucune activité trouvée.'));
         }
 
+<<<<<<< Updated upstream
         return Container(
           margin: const EdgeInsets.symmetric(
               vertical: 20.0, horizontal: 10.0), // Margin for spacing
@@ -75,6 +77,30 @@ class ActivityCardDetail extends StatelessWidget {
                     style: TextStyle(fontSize: 14),
                   ),
                 ],
+=======
+        return Card(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Activity ID: ${activity['id'] ?? 'N/A'}',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    const Gap(10),
+                    Text('Created At: ${activity['created_at'] ?? 'N/A'}'),
+                    Text('Time: ${activity['time'] ?? 'N/A'} minutes'),
+                    Text('Speed: ${activity['speed'] ?? 'N/A'} km/h'),
+                    Text('Distance: ${activity['distance'] ?? 'N/A'} km'),
+                    Text('Profile ID: ${activity['profile_id'] ?? 'N/A'}'),
+                  ],
+                ),
+>>>>>>> Stashed changes
               ),
             ),
           ),
