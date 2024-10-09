@@ -108,7 +108,7 @@ class _MapsState extends State<Maps> {
     });
   }
 
-// Save route data and show a pop-up message
+  // Save route data and show a pop-up message
   void _endJourney(BuildContext context) async {
     if (routePoints.isNotEmpty) {
       DateTime endTime = DateTime.now();
@@ -207,6 +207,11 @@ class _MapsState extends State<Maps> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Distance display
+                  Text(
+                    'Distance: ${totalDistance.toStringAsFixed(2)} km',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                   // Icons and labels (Itinerary, Pause/Resume, Voice)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
