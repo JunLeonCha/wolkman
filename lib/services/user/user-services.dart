@@ -14,7 +14,7 @@ class UserServices {
 
   Future<Map<String, dynamic>?> getUserDetails() async {
     final userId = getCurrentUser()?.id;
-    if (userId == null) return null; // Return null if userId is not found
+    if (userId == null) return null;
 
     final response =
         await supabase.from("profiles").select("*").eq("id", userId).single();

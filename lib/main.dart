@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wolkman/services/supabase.dart';
 import 'package:wolkman/services/user/user-services.dart';
 import 'package:wolkman/views/Homepage.dart';
+import 'package:wolkman/views/list-activities.dart';
 import 'package:wolkman/views/maps.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:wolkman/views/authentication.dart';
@@ -12,6 +13,7 @@ void main() async {
   await SupabaseService.initialize();
 
   final currentUser = UserServices().getCurrentUser();
+  final currentUserId = currentUser?.id;
 
   runApp(
     GetMaterialApp(
@@ -20,6 +22,11 @@ void main() async {
       getPages: [
         GetPage(name: '/', page: () => Homepage()),
         GetPage(name: '/sign_in', page: () => Authentication()),
+        GetPage(
+            name: '/list_activities',
+            page: () => ListActivities(
+                  userId: currentUserId,
+                )),
         GetPage(name: '/map', page: () => Maps()),
       ],
     ),
