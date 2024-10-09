@@ -31,7 +31,6 @@ class ActivityServices extends GetxController {
           .select("*")
           .eq("profile_id", id as String);
       print(activities);
-      // Convertir les résultats en List<Map<String, dynamic>>
       return activities
           .map((activity) => activity as Map<String, dynamic>)
           .toList();
