@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:wolkman/views/list-activities.dart';
 
 class FollowUpSheet extends StatelessWidget {
-  const FollowUpSheet({super.key});
+  final String? userId;
+
+  const FollowUpSheet({super.key, required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -11,12 +14,17 @@ class FollowUpSheet extends StatelessWidget {
       children: [
         Row(
           children: [
-            ElevatedButton(onPressed: () => {}, child: Text("Moi")),
+            ElevatedButton(onPressed: () => {}, child: const Text("Moi")),
             const Gap(20),
-            ElevatedButton(onPressed: () => {}, child: Text("Suivi")),
+            ElevatedButton(onPressed: () => {}, child: const Text("Suivi")),
             const Gap(20),
             ElevatedButton(
-                onPressed: () => {Get.toNamed("/map")}, child: Text("Map")),
+                onPressed: () => {Get.to(ListActivities(userId: userId))},
+                child: const Text("Liste des activitées")),
+            const Gap(20),
+            ElevatedButton(
+                onPressed: () => {Get.toNamed("/map")},
+                child: const Text("Map")),
           ],
         ),
       ],

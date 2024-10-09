@@ -7,11 +7,27 @@ class ActivityServices extends GetxController {
   // Observable pour stocker les détails de l'activité
   var activityDetail = {}.obs;
 
-  Future<List<Map<String, dynamic>>> fetchCurrentUserActivityDetails(
-      String id) async {
+  Future<Map<String, dynamic>> getActivityDetails(num activityId) async {
     try {
-      final List<dynamic> activities =
-          await supabase.from("activities").select("*").eq("profile_id", id);
+      final activity = await supabase
+          .from("activities")
+          .select("*")
+          .eq("id", activityId)
+          .single();
+      return activity;
+    } catch (e) {
+      print('Error fetching activity details: $e');
+      return {};
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchCurrentUserActivitiesDetails(
+      String? id) async {
+    try {
+      final List<dynamic> activities = await supabase
+          .from("activities")
+          .select("*")
+          .eq("profile_id", id as String);
       print(activities);
       // Convertir les résultats en List<Map<String, dynamic>>
       return activities

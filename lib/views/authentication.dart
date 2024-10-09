@@ -28,11 +28,34 @@ class _AuthenticationState extends State<Authentication> {
       final password = passwordController.text;
 
       if (isLogin) {
-        await _authService.signIn(email, password);
+        try {
+          await _authService.signIn(email, password);
+        } catch (e) {
+          // Gérer les erreurs de connexion
+          print('Erreur lors de la connexion : $e');
+        }
       } else {
         final firstname = firstnameController.text;
         final lastname = lastnameController.text;
-        await _authService.signUp(email, password, firstname, lastname);
+
+        try {
+          // Inscription réussie, puis on réinitialise le formulaire
+          await _authService.signUp(email, password, firstname, lastname);
+
+          // Reset the form fields
+          emailController.clear();
+          passwordController.clear();
+          firstnameController.clear();
+          lastnameController.clear();
+
+          // Switch to login mode
+          setState(() {
+            isLogin = true;
+          });
+        } catch (e) {
+          // Gérer les erreurs d'inscription
+          print('Erreur lors de l\'inscription : $e');
+        }
       }
     }
   }

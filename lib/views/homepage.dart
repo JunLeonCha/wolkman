@@ -13,20 +13,22 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Center(child: Text("Accueil"))),
-      body: SingleChildScrollView(
-        // Ajout de SingleChildScrollView
-        child: Container(
-          margin: const EdgeInsets.all(24.0),
-          child: Column(
-            children: [
-              FollowUpSheet(),
-              Gap(16),
-              LastActivities(),
-              ElevatedButton(
-                onPressed: () => {_authService.signOut()},
-                child: Text("Déconnexion"),
-              ),
-            ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.all(24.0),
+            child: Column(
+              children: [
+                FollowUpSheet(
+                    userId: _authService.supabase.auth.currentUser?.id),
+                Gap(16),
+                LastActivities(),
+                ElevatedButton(
+                  onPressed: () => {_authService.signOut()},
+                  child: Text("Déconnexion"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
