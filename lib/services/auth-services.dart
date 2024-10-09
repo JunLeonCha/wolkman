@@ -27,13 +27,16 @@ class AuthService {
       String email, String password, firstname, lastname) async {
     try {
       final display_name = '${firstname} ${lastname}';
-      final response = await supabase.auth.signUp(
-          email: email,
-          password: password,
-          data: {'display_name': display_name});
+      final response =
+          await supabase.auth.signUp(email: email, password: password, data: {
+        'firstname': firstname,
+        'display_name': display_name,
+        'lastname': lastname,
+      });
       if (response.user != null) {
         // sign up succed
         Get.snackbar('Success', 'Inscription réussie avec l\'email: $email');
+        Get.offNamed("/");
       }
     } on AuthException catch (e) {
       Get.snackbar('Error', e.message);
