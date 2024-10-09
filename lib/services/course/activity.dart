@@ -7,23 +7,37 @@ class ActivityServices extends GetxController {
   final UserServices userServices =
       UserServices(); // Create an instance of UserServices
 
-  // Observable to store activity details
   var activityDetail = {}.obs;
 
-  // Fetch the current user's activity details
-  Future<List<Map<String, dynamic>>> fetchCurrentUserActivityDetails(
-      String id) async {
+  Future<Map<String, dynamic>> getActivityDetails(num activityId) async {
     try {
-      final List<dynamic> activities =
-          await supabase.from("activities").select("*").eq("profile_id", id);
+      final activity = await supabase
+          .from("activities")
+          .select("*")
+          .eq("id", activityId)
+          .single();
+      return activity;
+    } catch (e) {
+      print('Error: $e');
+      return {};
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchCurrentUserActivitiesDetails(
+      String? id) async {
+    try {
+      final List<dynamic> activities = await supabase
+          .from("activities")
+          .select("*")
+          .eq("profile_id", id as String);
       print(activities);
-      // Convert the results to List<Map<String, dynamic>>
+      // Convertir les résultats en List<Map<String, dynamic>>
       return activities
           .map((activity) => activity as Map<String, dynamic>)
           .toList();
     } catch (e) {
       print('Error fetching activity details: $e');
-      return []; // Return an empty list in case of error
+      return [];
     }
   }
 
@@ -39,7 +53,7 @@ class ActivityServices extends GetxController {
           .single();
       return lastActivity;
     } catch (e) {
-      print('Error fetching last activity details: $e');
+      print('Erreur: $e');
       return null;
     }
   }

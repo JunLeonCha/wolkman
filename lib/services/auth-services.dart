@@ -36,7 +36,6 @@ class AuthService {
       if (response.user != null) {
         // sign up succed
         Get.snackbar('Success', 'Inscription réussie avec l\'email: $email');
-        Get.offNamed("/");
       }
     } on AuthException catch (e) {
       Get.snackbar('Error', e.message);
