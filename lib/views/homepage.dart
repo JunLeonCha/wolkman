@@ -12,8 +12,10 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Center(child: Text("Accueil"))),
-        body: Container(
+      appBar: AppBar(title: Center(child: Text("Accueil"))),
+      body: SingleChildScrollView(
+        // Ajout de SingleChildScrollView
+        child: Container(
           margin: const EdgeInsets.all(24.0),
           child: Column(
             children: [
@@ -26,6 +28,8 @@ class Homepage extends StatelessWidget {
               ),
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

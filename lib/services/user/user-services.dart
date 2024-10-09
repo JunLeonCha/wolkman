@@ -5,15 +5,20 @@ class UserServices {
 
   User? getCurrentUser() {
     try {
-      final user = supabase.auth.currentUser;
-      if (user != null) {
-        return user;
-      } else {
-        return null;
-      }
+      return supabase.auth.currentUser;
     } catch (e) {
       print('Error getting current user: $e');
       return null;
     }
+  }
+
+  Future<Map<String, dynamic>?> getUserDetails() async {
+    final userId = getCurrentUser()?.id;
+    if (userId == null) return null; // Return null if userId is not found
+
+    final response =
+        await supabase.from("profiles").select("*").eq("id", userId).single();
+
+    return response;
   }
 }
