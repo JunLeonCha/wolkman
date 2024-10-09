@@ -23,6 +23,8 @@ class ActivityServices extends GetxController {
     }
   }
 
+  Future<void> getCurrentUserActivityDetails(String id) async {}
+
   Future<dynamic> getCurrentUserLastActivityDetails(String id) async {
     try {
       final lastActivity = await supabase
