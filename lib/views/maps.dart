@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:gap/gap.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import '../services/course/activity.dart';
@@ -245,7 +246,7 @@ class _MapsState extends State<Maps> {
                     ],
                   ),
                   // Display real-time distance
-                  SizedBox(height: 20),
+                  const Gap(20),
                   Text(
                     'Distance: ${totalDistance.toStringAsFixed(2)} km', // Display the distance in km
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
